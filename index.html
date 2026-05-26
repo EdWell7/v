@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdWell - Your Cozy AI Space</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for professional modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+    <div class="ambient-glow" id="ambientGlow"></div>
+
+    <!-- AUTHENTICATION SCREEN -->
+    <div id="authScreen" class="screen active">
+        <div class="auth-card">
+            <div class="brand">
+                <i class="fa-solid fa-cubes-gradient brand-icon"></i>
+                <h1>EdWell</h1>
+                <p>Your Cozy AI Study & Lifestyle Space</p>
+            </div>
+            <div class="auth-tabs">
+                <button id="tabLogin" class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button id="tabRegister" class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="input-group">
+                    <label for="username"><i class="fa-solid fa-user"></i> Username</label>
+                    <input type="text" id="username" required placeholder="Enter username...">
+                </div>
+                <div class="input-group">
+                    <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary" id="authSubmitBtn">Enter Space</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="mainDashboard" class="screen">
+        <header class="main-header">
+            <div class="user-profile">
+                <i class="fa-solid fa-circle-user profile-avatar"></i>
+                <div>
+                    <h3 id="displayUsername">User</h3>
+                    <span>Status: Dynamic Learning</span>
+                </div>
+            </div>
+            <div class="app-logo-text">EdWell</div>
+            <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Section 1: AI Core -->
+            <div class="dashboard-card" onclick="navigateTo('aiCoreScreen')">
+                <div class="card-icon neon-blue"><i class="fa-solid fa-brain"></i></div>
+                <h2>AI Core</h2>
+                <p>Calorie Analyzer, Height Estimator & Outfit Wizard.</p>
+                <div class="card-footer"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- Section 2: One-Min English Room -->
+            <div class="dashboard-card" onclick="navigateTo('englishRoomScreen')">
+                <div class="card-icon neon-purple"><i class="fa-solid fa-language"></i></div>
+                <h2>1-Min English</h2>
+                <p>Build your cozy gaming room by learning English daily.</p>
+                <div class="card-footer"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- Section 3: Study & Entertainment -->
+            <div class="dashboard-card" onclick="navigateTo('studyEntertainScreen')">
+                <div class="card-icon neon-green"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h2>Study & Play</h2>
+                <p>Pomodoro, Advanced Sliding Puzzle, Math Challenge & Flashcards Matrix.</p>
+                <div class="card-footer"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- Section 4: Mind Well -->
+            <div class="dashboard-card" onclick="navigateTo('mindWellScreen')">
+                <div class="card-icon neon-pink"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h2>Mind Well</h2>
+                <p>AI Mood Coach, Interactive Breath Pacer & Anti-Procrastination Synapse Engine.</p>
+                <div class="card-footer"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI CORE SCREEN -->
+    <div id="aiCoreScreen" class="screen section-container">
+        <div class="section-header">
+            <button class="btn-back" onclick="navigateTo('mainDashboard')"><i class="fa-solid fa-chevron-left"></i> Back</button>
+            <h1><i class="fa-solid fa-brain text-blue"></i> AI Core Hub</h1>
+        </div>
+        <div class="sub-navigation">
+            <button class="sub-nav-btn active" onclick="switchSubOption('ai-calories')"><i class="fa-solid fa-utensils"></i> Calorie Scanner</button>
+            <button class="sub-nav-btn" onclick="switchSubOption('ai-height')"><i class="fa-solid fa-ruler-vertical"></i> Height Estimator</button>
+            <button class="sub-nav-btn" onclick="switchSubOption('ai-outfit')"><i class="fa-solid fa-shirt"></i> Outfit Consultant</button>
+        </div>
+
+        <div class="sub-content-area">
+            <div id="ai-calories" class="sub-option-view active">
+                <div id="calorieUploadWrapper" class="ai-uploader-box">
+                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                    <h3>Upload Meal Photo</h3>
+                    <p>AI will analyze calories, macros, and deep ingredients.</p>
+                    <input type="file" id="calorieImgInput" accept="image/*" onchange="simulateCalorieAI()">
+                </div>
+                <div id="calorieResult" class="ai-result-panel hidden"></div>
+            </div>
+
+            <div id="ai-height" class="sub-option-view">
+                <div id="heightUploadWrapper" class="ai-uploader-box">
+                    <i class="fa-solid fa-user-tall upload-icon"></i>
+                    <h3>Upload Full Body Standing Photo</h3>
+                    <p>Ensure your background is visible for perspective analytics.</p>
+                    <input type="file" id="heightImgInput" accept="image/*" onchange="simulateHeightAI()">
+                </div>
+                <div id="heightResult" class="ai-result-panel hidden"></div>
+            </div>
+
+            <div id="ai-outfit" class="sub-option-view">
+                <div class="outfit-input-card">
+                    <h3><i class="fa-solid fa-cloud-sun"></i> Weather Outfit Intelligence</h3>
+                    <div class="input-group">
+                        <label>Enter Current Temperature (°C)</label>
+                        <input type="number" id="tempInput" placeholder="e.g. 18">
+                    </div>
+                    <button class="btn-primary" onclick="simulateOutfitAI()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Outfit Palette</button>
+                </div>
+                <div id="outfitResult" class="ai-result-panel hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ONE MINUTE ENGLISH ROOM SCREEN -->
+    <div id="englishRoomScreen" class="screen section-container">
+        <div class="section-header">
+            <button class="btn-back" onclick="navigateTo('mainDashboard')"><i class="fa-solid fa-chevron-left"></i> Back</button>
+            <h1><i class="fa-solid fa-language text-purple"></i> 1-Min Cozy English</h1>
+            <div class="streak-badge">🔥 Streak: <span id="streakCount">0</span> Days</div>
+        </div>
+
+        <div id="langSelectorView" class="premium-lang-vault hidden">
+            <div class="vault-header">
+                <i class="fa-solid fa-earth-americas vault-glow-icon"></i>
+                <h2>Choose Your Native Language</h2>
+                <p>Core UI elements stay in English, definitions map to your choice.</p>
+            </div>
+            <div class="premium-lang-grid">
+                <button class="lang-vault-btn" onclick="selectNativeLang('Arabic')"><span class="lang-title">العربية</span></button>
+                <button class="lang-vault-btn" onclick="selectNativeLang('French')"><span class="lang-title">Français</span></button>
+                <button class="lang-vault-btn" onclick="selectNativeLang('Spanish')"><span class="lang-title">Español</span></button>
+                <button class="lang-vault-btn" onclick="selectNativeLang('Turkish')"><span class="lang-title">Türkçe</span></button>
+            </div>
+        </div>
+
+        <div id="englishMainWorkspace" class="english-grid layout-hidden">
+            <div class="room-column">
+                <div class="room-canvas-wrapper">
+                    <div class="room-sky" id="roomSky"></div>
+                    <div class="room-canvas" id="virtualRoom"></div>
+                </div>
+                <div class="inventory-status">
+                    <h4>Unlocked Room Assets (<span id="inventoryCount">0</span>)</h4>
+                    <div class="inventory-tags" id="inventoryTags"></div>
+                </div>
+            </div>
+            <div class="learning-column">
+                <div id="dailyLessonContainer" class="dynamic-card"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUDY & ENTERTAINMENT SCREEN -->
+    <div id="studyEntertainScreen" class="screen section-container">
+        <div class="section-header">
+            <button class="btn-back" onclick="navigateTo('mainDashboard')"><i class="fa-solid fa-chevron-left"></i> Back</button>
+            <h1><i class="fa-solid fa-graduation-cap text-green"></i> Study & Entertainment Hub</h1>
+        </div>
+        <div class="sub-navigation">
+            <button class="sub-nav-btn active" onclick="switchSubOptionSE('se-timer')"><i class="fa-solid fa-stopwatch"></i> Cozy Timer</button>
+            <button class="sub-nav-btn" onclick="switchSubOptionSE('se-puzzle')"><i class="fa-solid fa-puzzle-piece"></i> 15 Puzzle</button>
+            <button class="sub-nav-btn" onclick="switchSubOptionSE('se-math')"><i class="fa-solid fa-calculator"></i> Infinite Math</button>
+            <button class="sub-nav-btn" onclick="switchSubOptionSE('se-flashcards')"><i class="fa-solid fa-layer-group"></i> Flashcards Matrix</button>
+        </div>
+
+        <div class="sub-content-area">
+            <!-- Cozy Timer -->
+            <div id="se-timer" class="sub-option-view SEactive">
+                <div class="timer-container">
+                    <div class="timer-circle-wrap">
+                        <svg class="timer-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" class="timer-bg-circle"></circle>
+                            <circle cx="50" cy="50" r="45" class="timer-progress-circle" id="timerProgressCircle"></circle>
+                        </svg>
+                        <div class="timer-text-display">
+                            <span id="timerTime">25:00</span>
+                            <span id="timerStatusLabel">Study Session</span>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn-circle" onclick="toggleTimer()"><i class="fa-solid fa-play" id="timerPlayIcon"></i></button>
+                        <button class="btn-circle btn-secondary" onclick="resetTimer()"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Puzzle Numbers (FIXED & FULLY FUNCTIONAL) -->
+            <div id="se-puzzle" class="sub-option-view">
+                <div class="puzzle-wrapper">
+                    <div class="puzzle-meta">
+                        <span>Level/Size: <b id="puzzleGridSizeLabel">3x3 Matrix</b></span>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-gaming-skip" style="background:rgba(0,255,135,0.1); border-color:var(--neon-green); color:var(--neon-green);" onclick="initOrRender15Puzzle()">Shuffle Board <i class="fa-solid fa-shuffle"></i></button>
+                            <button class="btn-gaming-skip" onclick="togglePuzzleDifficulty()">Toggle Grid Size <i class="fa-solid fa-arrows-up-down-left-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="puzzle-board" id="puzzleBoard"></div>
+                    <div id="puzzleWinMessage" class="hidden" style="text-align:center; color:var(--neon-green); font-weight:bold; margin-top:15px; font-size:1.2rem;">🏆 Paradox Decoupled! Puzzle Solved!</div>
+                </div>
+            </div>
+
+            <!-- Infinite Math Challenge -->
+            <div id="se-math" class="sub-option-view">
+                <div class="math-wrapper dynamic-card">
+                    <div class="math-meta">
+                        <span>Question Progress: <b id="mathIndex">1</b> / 2500</span>
+                        <button class="btn-gaming-skip" onclick="skipMathQuestion()">Skip Problem <i class="fa-solid fa-forward-fast"></i></button>
+                    </div>
+                    <div class="math-body">
+                        <div class="math-question" id="mathQuestionString">Generating calculation...</div>
+                        <div class="math-options-grid" id="mathOptionsContainer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flashcards Matrix -->
+            <div id="se-flashcards" class="sub-option-view">
+                <div class="flashcards-wrapper">
+                    <div class="flashcards-meta">
+                        <h3>Active Recall Flashcard Simulator</h3>
+                        <span>Reviewed: <b id="flashcardCount">0</b></span>
+                    </div>
+                    <div class="flashcard-topics-bar" id="flashcardTopicsBar"></div>
+                    <div class="flashcard-scene" onclick="flipActiveFlashcard()">
+                        <div class="flashcard-3d-node" id="active3DCard">
+                            <div class="flashcard-face flashcard-front">
+                                <div class="card-corner-label">QUESTION</div>
+                                <p id="fcQuestionText">Loading questions...</p>
+                                <span class="action-hint"><i class="fa-solid fa-rotate"></i> Click Card to Flip</span>
+                            </div>
+                            <div class="flashcard-face flashcard-back">
+                                <div class="card-corner-label">ANSWER</div>
+                                <p id="fcAnswerText">Loading answers...</p>
+                                <span class="action-hint"><i class="fa-solid fa-rotate"></i> Click to See Question</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flashcard-controls-row">
+                        <button class="btn-nav-carousel" onclick="cycleFlashcard(-1)"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                        <button class="btn-primary" style="width:auto; padding:10px 24px;" onclick="markFlashcardMastered()"><i class="fa-solid fa-circle-check"></i> Mastered Asset</button>
+                        <button class="btn-nav-carousel" onclick="cycleFlashcard(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MIND WELL SCREEN -->
+    <div id="mindWellScreen" class="screen section-container">
+        <div class="section-header">
+            <button class="btn-back" onclick="navigateTo('mainDashboard')"><i class="fa-solid fa-chevron-left"></i> Back</button>
+            <h1><i class="fa-solid fa-heart-pulse text-pink"></i> Mind Well Spaces</h1>
+        </div>
+        <div class="mindwell-layout">
+            <div class="dynamic-card">
+                <h3><i class="fa-solid fa-face-smile"></i> AI Mood Tracker & Coach</h3>
+                <p>How are you feeling at this stage of your session?</p>
+                <div class="mood-selectors">
+                    <button onclick="analyzeMood('Anxious')"><i class="fa-solid fa-face-frown-open"></i> Anxious</button>
+                    <button onclick="analyzeMood('Exhausted')"><i class="fa-solid fa-face-weary"></i> Exhausted</button>
+                    <button onclick="analyzeMood('Focused')"><i class="fa-solid fa-face-brain"></i> Productive</button>
+                    <button onclick="analyzeMood('Distracted')"><i class="fa-solid fa-face-rolling-eyes"></i> Wandering</button>
+                </div>
+                <div id="moodCoachFeedback" class="mood-feedback-box hidden"></div>
+            </div>
+
+            <div class="dynamic-card center-flex">
+                <h3><i class="fa-solid fa-wind"></i> Interactive Breath Pacer</h3>
+                <div class="breath-circle" id="breathCircle">Inhale</div>
+                <p class="breath-subtext" id="breathSubtext">Synchronize your respiration with the expansion metric.</p>
+                <button class="btn-small" onclick="toggleBreathPacer()" id="breathBtn">Start Guide</button>
+            </div>
+
+            <!-- BRAND NEW GENIUS SECTION: THE QUANTUM FOCUS SYNAPSE RADAR (FULLY WORKING WITH TIMERS & INTERACTION) -->
+            <div class="dynamic-card quantum-radar-panel">
+                <div class="procrastination-header-row">
+                    <h3><i class="fa-solid fa-shield-halved text-pink animate-pulse"></i> Quantum Focus Synapse</h3>
+                    <div class="live-pulse-badge"><span class="pulse-dot"></span> <span id="liveUsersCount">1,420</span> Active Studiers</div>
+                </div>
+                <p>Advanced neuro-behavioral lockdown interface designed to shatter cognitive resistance immediately.</p>
+                
+                <!-- The Live Synapse Countdown Core -->
+                <div class="quantum-core-box">
+                    <div class="radar-scan-line" id="radarScanLine"></div>
+                    <div class="quantum-timer-numeric" id="quantumTimerDisplay">05:00</div>
+                    <div class="quantum-status-sub" id="quantumStatusMessage">SYSTEM IDLE // AWAITING NEURAL STIMULUS</div>
+                </div>
+
+                <div class="behavioral-card-panel">
+                    <div class="behavioral-icon-wrap"><i class="fa-solid fa-brain-circuit" id="procrastinationIcon"></i></div>
+                    <div class="behavioral-content">
+                        <h4 id="procChallengeTitle">The 5-Minute Friction Override</h4>
+                        <p id="procChallengeDesc">Commit to study for exactly 300 seconds. If you desire to stop afterwards, you are permitted. Inertia is your only true obstacle.</p>
+                    </div>
+                </div>
+
+                <!-- Binaural Audio/Focus wave simulator control -->
+                <div class="binaural-controller-row">
+                    <span><i class="fa-solid fa-wave-square text-pink"></i> Focus Brainwave Frequency (Audio Synth):</span>
+                    <button class="btn-audio-sim" id="synthAudioBtn" onclick="toggleQuantumBinauralSynth()" title="Play Focus Waves"><i class="fa-solid fa-headphones"></i></button>
+                </div>
+
+                <div class="focus-points-display">
+                    <span>Accumulated Focus Capital:</span>
+                    <b id="focusCapitalPoints">0 FP</b>
+                </div>
+
+                <div class="procrastination-actions-grid">
+                    <button class="btn-primary" id="btnQuantumAction" onclick="engageQuantumProcrastinationOverride()"><i class="fa-solid fa-bolt"></i> Inject Focus Protocol</button>
+                    <button class="btn-gaming-skip" style="justify-content:center;" onclick="generateNewBehavioralProtocol()">Reroll Protocol <i class="fa-solid fa-shuffle"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REWARD MODAL OVERLAY -->
+    <div class="modal-overlay" id="rewardModal">
+        <div class="reward-box-card" id="rewardBoxCard">
+            <div id="rewardBoxClosed">
+                <i class="fa-solid fa-box-open box-shaking-icon"></i>
+                <h2>Evaluation Matrix Completed!</h2>
+                <p>Tap below to unlock your daily room reward asset.</p>
+                <button class="btn-primary" onclick="triggerMysteryBoxOpening()">Open Mystery Box</button>
+            </div>
+            <div id="rewardBoxOpened" class="hidden">
+                <div class="rarity-tag" id="rewardRarity">Legendary</div>
+                <div class="reward-graphic-display" id="rewardGraphic"></div>
+                <h2 id="rewardTitle">Gaming Monitor</h2>
+                <p>Added straight to your virtual environment inventory.</p>
+                <button class="btn-primary" onclick="closeRewardModal()">Back to Space</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
